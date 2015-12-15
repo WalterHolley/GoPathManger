@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Windows.Forms;
+using GOPATHLib;
 
 namespace GOPATHManage
 {
@@ -29,6 +30,9 @@ namespace GOPATHManage
         {
             ManagePathForm mpForm = new ManagePathForm(Constants.KeyMethod.ADD);
             DialogResult result = mpForm.ShowDialog(this);
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+                UpdatePathList();
         }
 
         private void btnChangePath_Click(object sender, EventArgs e)
@@ -36,6 +40,13 @@ namespace GOPATHManage
             string selectedPath = ((KeyValuePair<string, string>)lbPaths.SelectedItem).Value;
             GoPathCommands cmd = new GoPathCommands();
             cmd.ChangeGoPath(selectedPath);
+            UpdateCurrentPath();
+        }
+
+        private void lbPaths_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lblSelectedPathKey.Text = ((KeyValuePair<string, string>)lbPaths.SelectedItem).Key;
+            lblSelectedPath.Text = lbPaths.SelectedValue.ToString();
         }
 
         private void UpdatePathList()
@@ -45,12 +56,15 @@ namespace GOPATHManage
             lbPaths.DisplayMember = "Key";
             lbPaths.ValueMember = "Value";
             lbPaths.DataSource = ConvertPaths(paths);
-            
-
-            
-
             lbPaths.Refresh();
 
+            
+        }
+
+        private void UpdateCurrentPath()
+        {
+            lblCurrentPath.Text = new GoPathCommands().GetCurrentGoPath();
+            lblCurrentPath.Refresh();
         }
 
         private void FormInit()
@@ -65,7 +79,7 @@ namespace GOPATHManage
                 string goPath = cmd.GetCurrentGoPath();
                 switch(goPath)
                 {
-                    case Constants.PATH_NOT_FOUND_ERROR:
+                    case GOPATHLib.Constants.PATH_NOT_FOUND_ERROR:
                          var result = MessageBox.Show("Go is available, but a path is not set.  Would you like to set a path?", "Set Go Path", MessageBoxButtons.YesNo);
                         if(result == System.Windows.Forms.DialogResult.Yes)
                         {
@@ -76,7 +90,7 @@ namespace GOPATHManage
                                 Application.Exit();
                         }
                         break;
-                    case Constants.ROOT_NOT_FOUND_ERROR:
+                    case GOPATHLib.Constants.ROOT_NOT_FOUND_ERROR:
                         MessageBox.Show("An installation of Go was not found on this machine.", "Go Not Found", MessageBoxButtons.OK);
                         Application.Exit();
                         break;
@@ -92,6 +106,7 @@ namespace GOPATHManage
           
 
             UpdatePathList();
+            UpdateCurrentPath();
             
         }
 
@@ -111,6 +126,8 @@ namespace GOPATHManage
             }
             return paths;
         }
+
+    
 
         
     }

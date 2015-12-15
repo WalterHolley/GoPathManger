@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using Microsoft.Win32;
 
-namespace GOPATHManage
+namespace GOPATHLib
 {
     public class GoPathCommands
     {

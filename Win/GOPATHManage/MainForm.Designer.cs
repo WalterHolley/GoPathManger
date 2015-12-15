@@ -39,6 +39,12 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnChangePath = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblSelectedPathKey = new System.Windows.Forms.Label();
+            this.lblSelectedPath = new System.Windows.Forms.Label();
+            this.lblCurrentPath = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnModify = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,7 +55,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(451, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(433, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -87,6 +93,7 @@
             this.lbPaths.Name = "lbPaths";
             this.lbPaths.Size = new System.Drawing.Size(130, 199);
             this.lbPaths.TabIndex = 1;
+            this.lbPaths.SelectedIndexChanged += new System.EventHandler(this.lbPaths_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -107,7 +114,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(16, 308);
+            this.btnAdd.Location = new System.Drawing.Point(11, 307);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(127, 37);
             this.btnAdd.TabIndex = 4;
@@ -117,7 +124,7 @@
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(16, 351);
+            this.btnRemove.Location = new System.Drawing.Point(144, 307);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(127, 37);
             this.btnRemove.TabIndex = 5;
@@ -126,7 +133,7 @@
             // 
             // btnChangePath
             // 
-            this.btnChangePath.Location = new System.Drawing.Point(152, 243);
+            this.btnChangePath.Location = new System.Drawing.Point(19, 368);
             this.btnChangePath.Name = "btnChangePath";
             this.btnChangePath.Size = new System.Drawing.Size(127, 37);
             this.btnChangePath.TabIndex = 6;
@@ -134,11 +141,70 @@
             this.btnChangePath.UseVisualStyleBackColor = true;
             this.btnChangePath.Click += new System.EventHandler(this.btnChangePath_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(156, 173);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(123, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Current Path In Use:";
+            // 
+            // lblSelectedPathKey
+            // 
+            this.lblSelectedPathKey.AutoSize = true;
+            this.lblSelectedPathKey.Location = new System.Drawing.Point(172, 98);
+            this.lblSelectedPathKey.Name = "lblSelectedPathKey";
+            this.lblSelectedPathKey.Size = new System.Drawing.Size(0, 13);
+            this.lblSelectedPathKey.TabIndex = 8;
+            // 
+            // lblSelectedPath
+            // 
+            this.lblSelectedPath.AutoSize = true;
+            this.lblSelectedPath.Location = new System.Drawing.Point(172, 115);
+            this.lblSelectedPath.Name = "lblSelectedPath";
+            this.lblSelectedPath.Size = new System.Drawing.Size(0, 13);
+            this.lblSelectedPath.TabIndex = 9;
+            // 
+            // lblCurrentPath
+            // 
+            this.lblCurrentPath.AutoSize = true;
+            this.lblCurrentPath.Location = new System.Drawing.Point(156, 208);
+            this.lblCurrentPath.Name = "lblCurrentPath";
+            this.lblCurrentPath.Size = new System.Drawing.Size(0, 13);
+            this.lblCurrentPath.TabIndex = 10;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(156, 85);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(115, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Currently Selected:";
+            // 
+            // btnModify
+            // 
+            this.btnModify.Location = new System.Drawing.Point(277, 307);
+            this.btnModify.Name = "btnModify";
+            this.btnModify.Size = new System.Drawing.Size(127, 37);
+            this.btnModify.TabIndex = 12;
+            this.btnModify.Text = "Modify";
+            this.btnModify.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(451, 429);
+            this.ClientSize = new System.Drawing.Size(433, 429);
+            this.Controls.Add(this.btnModify);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblCurrentPath);
+            this.Controls.Add(this.lblSelectedPath);
+            this.Controls.Add(this.lblSelectedPathKey);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnChangePath);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnAdd);
@@ -148,7 +214,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Go Path Manager";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -170,6 +236,12 @@
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnChangePath;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblSelectedPathKey;
+        private System.Windows.Forms.Label lblSelectedPath;
+        private System.Windows.Forms.Label lblCurrentPath;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnModify;
     }
 }
 

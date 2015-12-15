@@ -102,6 +102,7 @@
             this.Controls.Add(this.txtGoPath);
             this.Name = "ManagePathForm";
             this.Text = "Manage Path";
+            this.Load += new System.EventHandler(this.ManagePathForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

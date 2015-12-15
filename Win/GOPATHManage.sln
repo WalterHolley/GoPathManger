@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOPATHManageUI", "GOPATHManage\GOPATHManageUI.csproj", "{131FB770-4BCC-4FAB-A8D5-83DA9E6AAF8C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOPATHLib", "GOPATHLib\GOPATHLib.csproj", "{A4AEE867-E526-440B-A9FB-C4D8038DABEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOPATHManageConsole", "GOPATHManageConsole\GOPATHManageConsole.csproj", "{015DD256-2324-4D1B-BA94-CEBDAFA0DD45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{131FB770-4BCC-4FAB-A8D5-83DA9E6AAF8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{131FB770-4BCC-4FAB-A8D5-83DA9E6AAF8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{131FB770-4BCC-4FAB-A8D5-83DA9E6AAF8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4AEE867-E526-440B-A9FB-C4D8038DABEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4AEE867-E526-440B-A9FB-C4D8038DABEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4AEE867-E526-440B-A9FB-C4D8038DABEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4AEE867-E526-440B-A9FB-C4D8038DABEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{015DD256-2324-4D1B-BA94-CEBDAFA0DD45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{015DD256-2324-4D1B-BA94-CEBDAFA0DD45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{015DD256-2324-4D1B-BA94-CEBDAFA0DD45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{015DD256-2324-4D1B-BA94-CEBDAFA0DD45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

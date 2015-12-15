@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GOPATHLib;
 
 namespace GOPATHManage
 {
@@ -45,6 +46,11 @@ namespace GOPATHManage
             }
 
             this.Close();
+        }
+
+        private void ManagePathForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

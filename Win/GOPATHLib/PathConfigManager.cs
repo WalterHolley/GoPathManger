@@ -6,17 +6,15 @@ using System.Text;
 using System.Xml;
 
 
-namespace GOPATHManage
+namespace GOPATHLib
 {
     public class PathConfigManager
     {
         
-        private Configuration configFile;
         private string configFilePath = AppDomain.CurrentDomain.BaseDirectory + "\\" + Constants.GOPATH_CONFIG_FILE;
 
         public PathConfigManager()
         {
-            configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             InitConfig();
         }
 
