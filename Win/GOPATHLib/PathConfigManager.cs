@@ -43,11 +43,7 @@ namespace GOPATHLib
                     }
                 }
             }
-            else
-            {
-
-            }
-
+          
             XmlElement newPath = doc.CreateElement(Constants.GOPATH_PATH_ELEMENT);
             newPath.SetAttribute("key", alias);
             newPath.SetAttribute("value", directory);
@@ -82,16 +78,75 @@ namespace GOPATHLib
             }
         }
 
-        public void UpdateGoPath(string alias, string directory)
+        public void UpdateGoPath(string alias, string newDirectory)
         {
+            XmlDocument doc = GetPathConfig();
+            XmlNode node = doc.SelectSingleNode("//" + Constants.GOPATH_CONFIG_ELEMENT);
+            XmlNodeList pathNodes = node.SelectNodes("//" + Constants.GOPATH_PATH_ELEMENT);
 
+            if (pathNodes != null)
+            {
+                foreach (XmlNode n in pathNodes)
+                {
+                    if (n.Attributes["key"].Value == alias)
+                    {
+                        n.Attributes["value"].Value = newDirectory;
+                        doc.Save(configFilePath);
+                        break;
+                    }
+                }
+            }
         }
 
-        public XmlNodeList GetGoPaths()
+        
+        /// <summary>
+        /// Updates the Key value for a path configuration
+        /// </summary>
+        /// <param name="currentKey">existing path key</param>
+        /// <param name="newKey">new path key</param>
+        public void UpdateGoPathKey(string currentKey, string newKey)
+        {
+            XmlDocument doc = GetPathConfig();
+            XmlNode node = doc.SelectSingleNode("//" + Constants.GOPATH_CONFIG_ELEMENT);
+            XmlNodeList pathNodes = node.SelectNodes("//" + Constants.GOPATH_PATH_ELEMENT);
+
+            if(pathNodes != null)
+            {
+                foreach( XmlNode n in pathNodes)
+                {
+                    if (n.Attributes["key"].Value == currentKey)
+                    {
+                        n.Attributes["key"].Value = newKey;
+                        doc.Save(configFilePath);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private XmlNodeList GetGoPaths()
         {
             XmlDocument doc = GetPathConfig();
             var node = doc.SelectSingleNode("//" + Constants.GOPATH_CONFIG_ELEMENT);
             return node.SelectNodes("//" + Constants.GOPATH_PATH_ELEMENT);
+        }
+
+        /// <summary>
+        /// Converts the xml node list to key/value pairs
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public List<KeyValuePair<string, string>> GetPaths()
+        {
+            List<KeyValuePair<string, string>> paths = new List<KeyValuePair<string, string>>();
+            var list = GetGoPaths();
+
+            foreach (XmlNode n in list)
+            {
+                var path = new KeyValuePair<string, string>(n.Attributes["key"].Value, n.Attributes["value"].Value);
+                paths.Add(path);
+            }
+            return paths;
         }
 
         private XmlDocument GetPathConfig()

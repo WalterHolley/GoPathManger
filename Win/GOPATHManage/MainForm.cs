@@ -51,11 +51,11 @@ namespace GOPATHManage
 
         private void UpdatePathList()
         {
-            var paths = new PathConfigManager().GetGoPaths();
+            var paths = new PathConfigManager().GetPaths();
 
             lbPaths.DisplayMember = "Key";
             lbPaths.ValueMember = "Value";
-            lbPaths.DataSource = ConvertPaths(paths);
+            lbPaths.DataSource = paths;
             lbPaths.Refresh();
 
             
@@ -70,7 +70,7 @@ namespace GOPATHManage
         private void FormInit()
         {
             PathConfigManager pm = new PathConfigManager();
-            var paths = pm.GetGoPaths();
+            var paths = pm.GetPaths();
 
             if(paths.Count == 0)
             {
@@ -109,25 +109,6 @@ namespace GOPATHManage
             UpdateCurrentPath();
             
         }
-
-        /// <summary>
-        /// Converts the xml node list to a key/value dictionary for binding
-        /// </summary>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        private List<KeyValuePair<string, string>> ConvertPaths(System.Xml.XmlNodeList list)
-        {
-            List<KeyValuePair<string, string>> paths = new List<KeyValuePair<string, string>>();
-            
-            foreach(XmlNode n in list)
-            {
-                var path = new KeyValuePair<string,string>(n.Attributes["key"].Value, n.Attributes["value"].Value);
-                paths.Add(path);
-            }
-            return paths;
-        }
-
-    
 
         
     }
