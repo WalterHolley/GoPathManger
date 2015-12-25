@@ -104,11 +104,12 @@ namespace GOPATHLib
         /// </summary>
         /// <param name="currentKey">existing path key</param>
         /// <param name="newKey">new path key</param>
-        public void UpdateGoPathKey(string currentKey, string newKey)
+        public bool UpdateGoPathKey(string currentKey, string newKey)
         {
             XmlDocument doc = GetPathConfig();
             XmlNode node = doc.SelectSingleNode("//" + Constants.GOPATH_CONFIG_ELEMENT);
             XmlNodeList pathNodes = node.SelectNodes("//" + Constants.GOPATH_PATH_ELEMENT);
+            bool keyUpdated = false;
 
             if(pathNodes != null)
             {
@@ -118,10 +119,13 @@ namespace GOPATHLib
                     {
                         n.Attributes["key"].Value = newKey;
                         doc.Save(configFilePath);
+                        keyUpdated = true;
                         break;
                     }
                 }
             }
+
+            return keyUpdated;
         }
 
         private XmlNodeList GetGoPaths()

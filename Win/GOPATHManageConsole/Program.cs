@@ -24,39 +24,100 @@ namespace GOPATHManageConsole
     class Program
     {
         static void Main(string[] args)
-        {
-            ParseCommands(args);
+        {   
+            var performTask = Init();
+            
+            if(!performTask && args[0] == "a" || performTask)
+                ParseCommands(args);
            
         }
+
+
+        private static bool Init()
+        {
+            PathConfigManager pcm = new PathConfigManager();
+
+            var paths = pcm.GetPaths();
+
+            if(paths.Count == 0)
+            {
+                GoPathCommands cmds = new GoPathCommands();
+                var gPath = cmds.GetCurrentGoPath();
+
+                switch(gPath)
+                {
+                    case Constants.PATH_NOT_FOUND_ERROR:
+                        Console.WriteLine("No Go Path is currently set");
+                        return false;
+                    case Constants.ROOT_NOT_FOUND_ERROR:
+                        Console.WriteLine("Go does not appear to be installed");
+                        return false;
+                    default:
+                        pcm.AddGoPath("default", gPath);
+                        Console.WriteLine("Current path discovered.  Added as 'default'");
+                        ListPaths();
+                        break;
+
+                }
+            }
+            return true;
+        }
+
 
         private static void ParseCommands(string[] args)
         {
             GoPathCommands cmds = new GoPathCommands();
             PathConfigManager pcm = new PathConfigManager();
+            string[] parameters = new string[args.Length - 1];
+            
+            Array.Copy(args, 1, parameters, 0, args.Length - 1);
+
+            if(parameters.Length == 0 && args[0] != "l")
+            {
+                Console.WriteLine("No arguments");
+                return;
+            }
+
 
             switch(args[0])
             {
                 case "a":
-                    pcm.AddGoPath(args[1], args[2]);
+                    AddPath(parameters);
                     break;
                 case "c":
-                    if(!ChangePath(args[1]))
-                    {
-                        Console.WriteLine("Key not found, or Unable to create path");
-                    }
+                    ChangePath(parameters);
                     break;
                 case "l":
                     ListPaths();
                     break;
                 case "d":
-                    DeletePath(args[1]);
+                    DeletePath(parameters);
                     break;
                 case "u":
-                    UpdatePath(args[1], args[2]);
+                    UpdatePath(parameters);
                     break;
                 default:
                     break;
             }
+        }
+        
+        /// <summary>
+        /// Adds a go path to the path configuration list
+        /// </summary>
+        /// <param name="args">array of add path arguments from the console</param>
+        private static void AddPath(string[] args)
+        {
+            PathConfigManager pcm = new PathConfigManager();
+            try 
+            {
+                pcm.AddGoPath(args[0], args[1]);
+                Console.WriteLine("Path successfully added.");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Path add failed: " + ex.Message);
+            }
+            
         }
 
         //TODO: Revise to take in full array of arguments.  Perform update options according to user input
@@ -65,21 +126,42 @@ namespace GOPATHManageConsole
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        private static void UpdatePath(string key, string value)
+        private static void UpdatePath(string[] args)
         {
             PathConfigManager pcm = new PathConfigManager();
-
-            if (!Path.IsPathRooted(value))
-                pcm.UpdateGoPathKey(key, value);
+            if(args.Length > 2)
+            {
+                Console.WriteLine("Invalid number of arguments");
+                return;
+            }
             else
-                pcm.UpdateGoPath(key, value);
+            {
+                if (!Path.IsPathRooted(args[1]))
+                {
+                    Console.WriteLine(String.Format("Changing key from {0} to {1}", args[0], args[1]));
+                   if(pcm.UpdateGoPathKey(args[0], args[1]))
+                       Console.WriteLine("Key updated");
+                   else
+                       Console.WriteLine("Key update failed");
+
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Updating path for key " + args[0]);
+                    pcm.UpdateGoPath(args[0], args[1]);
+                }
+
+                
+            }
+
         }
 
         /// <summary>
         /// Removes path from stored path configuration
         /// </summary>
         /// <param name="key"></param>
-        private static void DeletePath(string key)
+        private static void DeletePath(string[] args)
         {
             PathConfigManager pcm = new PathConfigManager();
             GoPathCommands cmds = new GoPathCommands();
@@ -89,7 +171,7 @@ namespace GOPATHManageConsole
 
             foreach(KeyValuePair<string, string> kvp in paths)
             {
-                if(key == kvp.Key || key == kvp.Value)
+                if(args[0] == kvp.Key || args[0] == kvp.Value)
                 {
                     pcm.RemoveGoPath(kvp.Key);
                     Console.WriteLine("Path Removed");
@@ -105,7 +187,13 @@ namespace GOPATHManageConsole
             PathConfigManager pcm = new PathConfigManager();
             var paths = pcm.GetPaths();
 
-            Console.WriteLine("KEY \t DIRECTORY");
+            if(paths.Count == 0)
+            {
+                Console.WriteLine("No Paths currently set");
+                return;
+            }
+
+            Console.WriteLine("KEY \t\t DIRECTORY");
             foreach(KeyValuePair<string, string> kvp in paths)
             {
                 Console.WriteLine(string.Format("{0} \t {1}", kvp.Key, kvp.Value));
@@ -114,16 +202,21 @@ namespace GOPATHManageConsole
         }
 
 
-        private static bool ChangePath(string key)
+        /// <summary>
+        /// Change the current Go path on the system
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private static bool ChangePath(string[] args)
         {
             PathConfigManager pcm = new PathConfigManager();
             GoPathCommands cmds = new GoPathCommands();
             var paths = pcm.GetPaths();
-            if(!Path.IsPathRooted(key))
+            if(!Path.IsPathRooted(args[0]))
             {
                 foreach(KeyValuePair<string, string> kvp in paths)
                 {
-                    if(kvp.Key.Equals(key))
+                    if (kvp.Key.Equals(args[0]))
                     {
                         cmds.ChangeGoPath(kvp.Value);
                         return true;
@@ -132,10 +225,10 @@ namespace GOPATHManageConsole
             }
             else
             {
-                if (!Directory.Exists(key))
-                    Directory.CreateDirectory(key);
+                if (!Directory.Exists(args[0]))
+                    Directory.CreateDirectory(args[0]);
 
-                cmds.ChangeGoPath(key);
+                cmds.ChangeGoPath(args[0]);
                 return true;
             }
 
