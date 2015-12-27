@@ -26,9 +26,12 @@ namespace GOPATHManageConsole
         static void Main(string[] args)
         {   
             var performTask = Init();
-            
-            if(!performTask && args[0] == "a" || performTask)
-                ParseCommands(args);
+
+            if (args.Length > 0)
+            {
+                if (!performTask && args[0] == "a" || performTask)
+                    ParseCommands(args);
+            }
            
         }
 
@@ -47,14 +50,15 @@ namespace GOPATHManageConsole
                 switch(gPath)
                 {
                     case Constants.PATH_NOT_FOUND_ERROR:
-                        Console.WriteLine("No Go Path is currently set");
+                        Console.WriteLine(General.GPTH_NoPath_ErrorMsg);
                         return false;
                     case Constants.ROOT_NOT_FOUND_ERROR:
-                        Console.WriteLine("Go does not appear to be installed");
+                        Console.WriteLine(General.GPTH_NoRoot_ErrorMsg);
+                        Environment.Exit(0);
                         return false;
                     default:
-                        pcm.AddGoPath("default", gPath);
-                        Console.WriteLine("Current path discovered.  Added as 'default'");
+                        pcm.AddGoPath(General.GPTH_default_path_key, gPath);
+                        Console.WriteLine(General.GPTH_default_path_add_msg);
                         ListPaths();
                         break;
 
@@ -74,7 +78,7 @@ namespace GOPATHManageConsole
 
             if(parameters.Length == 0 && args[0] != "l")
             {
-                Console.WriteLine("No arguments");
+                Console.WriteLine(General.GPTH_invalid_num_args);
                 return;
             }
 
@@ -111,11 +115,11 @@ namespace GOPATHManageConsole
             try 
             {
                 pcm.AddGoPath(args[0], args[1]);
-                Console.WriteLine("Path successfully added.");
+                Console.WriteLine(General.GPTH_path_add);
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Path add failed: " + ex.Message);
+                Console.WriteLine(General.GPTH_path_add_failed + ex.Message);
             }
             
         }
@@ -131,24 +135,23 @@ namespace GOPATHManageConsole
             PathConfigManager pcm = new PathConfigManager();
             if(args.Length > 2)
             {
-                Console.WriteLine("Invalid number of arguments");
+                Console.WriteLine(General.GPTH_invalid_num_args);
                 return;
             }
             else
             {
                 if (!Path.IsPathRooted(args[1]))
                 {
-                    Console.WriteLine(String.Format("Changing key from {0} to {1}", args[0], args[1]));
                    if(pcm.UpdateGoPathKey(args[0], args[1]))
-                       Console.WriteLine("Key updated");
+                       Console.WriteLine(General.GPTH_key_updated);
                    else
-                       Console.WriteLine("Key update failed");
+                       Console.WriteLine(General.GPTH_key_update_fail_msg);
 
                     
                 }
                 else
                 {
-                    Console.WriteLine("Updating path for key " + args[0]);
+                    Console.WriteLine(General.GPTH_path_update + args[0]);
                     pcm.UpdateGoPath(args[0], args[1]);
                 }
 
@@ -174,7 +177,7 @@ namespace GOPATHManageConsole
                 if(args[0] == kvp.Key || args[0] == kvp.Value)
                 {
                     pcm.RemoveGoPath(kvp.Key);
-                    Console.WriteLine("Path Removed");
+                    Console.WriteLine(General.GPTH_path_removed);
                     break;
                 }
             }
@@ -189,11 +192,11 @@ namespace GOPATHManageConsole
 
             if(paths.Count == 0)
             {
-                Console.WriteLine("No Paths currently set");
+                Console.WriteLine(General.GPTH_no_path_set);
                 return;
             }
 
-            Console.WriteLine("KEY \t\t DIRECTORY");
+            Console.WriteLine(General.GPTH_pathlist_header_KEY + " \t\t " + General.GPTH_pathlist_header_DIR);
             foreach(KeyValuePair<string, string> kvp in paths)
             {
                 Console.WriteLine(string.Format("{0} \t {1}", kvp.Key, kvp.Value));

@@ -43,20 +43,43 @@ namespace GOPATHLib
 
         public void ChangeGoPath(string path)
         {
-            var mainKey = Registry.LocalMachine.OpenSubKey(Constants.GO_REGISTRY_LOCATION, true);
-            mainKey.SetValue(Constants.GOPATH_SYSTEM_VARIABLE, path);
+            //Make sure Go is available before changing path
+            if(!GetGoRoot().Equals(Constants.ROOT_NOT_FOUND_ERROR))
+            {
+                var mainKey = Registry.LocalMachine.OpenSubKey(Constants.GO_REGISTRY_LOCATION, true);
+
+                if (mainKey != null)
+                    mainKey.SetValue(Constants.GOPATH_SYSTEM_VARIABLE, path);
+            }
+            
         }
 
         private string GetPathFromRegistry()
         {
             var mainKey = Registry.LocalMachine.OpenSubKey(Constants.GO_REGISTRY_LOCATION, false);
-            return mainKey.GetValue(Constants.GOPATH_SYSTEM_VARIABLE).ToString();
+
+            if(mainKey != null)
+                return mainKey.GetValue(Constants.GOPATH_SYSTEM_VARIABLE).ToString();
+
+            return Constants.PATH_NOT_FOUND_ERROR;
         }
 
         private string GetGoRoot()
         {
-            var mainKey = Registry.LocalMachine.OpenSubKey(Constants.GO_REGISTRY_LOCATION, false);
-            return mainKey.GetValue(Constants.GOROOT_SYSTEM_VARIABLE).ToString();
+            try
+            {
+                var mainKey = Registry.LocalMachine.OpenSubKey(Constants.GO_REGISTRY_LOCATION, false);
+                return mainKey.GetValue(Constants.GOROOT_SYSTEM_VARIABLE).ToString();
+
+                
+            }
+            catch(Exception ex)
+            {
+                return Constants.ROOT_NOT_FOUND_ERROR;
+            }
+            
+
+            
         }
 
     }

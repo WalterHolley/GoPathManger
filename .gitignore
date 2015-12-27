@@ -4,3 +4,6 @@ Win/GOPATHLib/obj/
 Win/GOPATHManageConsole/obj/
 Win/GOPATHManageConsole/bin/
 Win/GoPathManage.Tests/obj/
+Win/GOPATHLib/bin/
+*.suo
+Win/GoPathManage.Tests/bin/
